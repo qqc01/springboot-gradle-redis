@@ -55,6 +55,33 @@ class RedisApplicationTests {
     }
 
     @Test
+    public void test() {
+        redisTemplate.opsForHash().delete("key", "hashKeys");
+    }
+
+    @Test
+    public void testBatchDelete() {
+        // 预置多条数据
+        stringRedisTemplate.opsForValue().set("str-one", "one");
+        stringRedisTemplate.opsForValue().set("str-two", "two");
+
+        redisTemplate.opsForValue().set("obj-one", "one");
+        redisTemplate.opsForValue().set("obj-two", "two");
+
+        // 批量删除数据
+        stringRedisTemplate.delete(Arrays.asList("str-one", "str-two"));
+        stringRedisTemplate.delete(Arrays.asList("str-one", "str-two"));
+        redisTemplate.delete(Arrays.asList("obj-one", "obj-two"));
+        redisTemplate.delete(Arrays.asList("obj-one", "obj-two"));
+
+
+        System.out.println("str-one: " + stringRedisTemplate.opsForValue().get("str-one"));
+        System.out.println("str-two: " + stringRedisTemplate.opsForValue().get("str-two"));
+        System.out.println("obj-one: " + redisTemplate.opsForValue().get("obj-one"));
+        System.out.println("obj-two: " + redisTemplate.opsForValue().get("obj-two"));
+    }
+
+    @Test
     public void setQuantityOfGoods (){
         // 设置购买额度
         stringRedisTemplate.opsForValue().set("goodsKey:85265602","5");
